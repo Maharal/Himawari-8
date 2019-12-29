@@ -12,7 +12,7 @@ setup(
   keywords = ['earth', 'himawari 8', 'planet', 'photo'],   
   install_requires=[           
           'requests',
-          'PIL',
+          'Pillow',
           'tqdm',
       ],
   classifiers=[
