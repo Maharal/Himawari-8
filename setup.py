@@ -10,7 +10,7 @@ setup(
   url = 'https://github.com/Maharal/Himawari-8',  
   download_url = 'https://github.com/Maharal/Himawari-8/archive/v0.1.tar.gz', 
   keywords = ['earth', 'himawari 8', 'planet', 'photo'],   
-  install_requires=[            # I get to this in a second
+  install_requires=[           
           'requests',
           'PIL',
           'tqdm',
