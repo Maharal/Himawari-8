@@ -8,7 +8,7 @@ setup(
   author = 'Raphael Augusto Teixeira Silva',                 
   author_email = 'raphaelaugustoteixeirasilva@gmail.com',      
   url = 'https://github.com/Maharal/Himawari-8',  
-  download_url = 'https://github.com/Maharal/Himawari-8/archive/v0.1.tar.gz', 
+  download_url = 'https://github.com/Maharal/Himawari-8/archive/v0.2.tar.gz', 
   keywords = ['earth', 'himawari 8', 'planet', 'photo'],   
   install_requires=[           
           'requests',
