@@ -123,6 +123,16 @@ def GetImageEarth(img_path = "", img_name = 'himawari.png', scale = 550, tile_nu
     return image
 
 def RangeDate(start, finish):
+    
+    """
+    Parameters
+        - start: begin range
+        - finish: end range
+        
+    Return: 
+        range of date between start and finish dates
+    """
+    
     _start = dp.parse(start)
     _finish = dp.parse(finish)    
     
