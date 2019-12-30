@@ -2,6 +2,9 @@
 
 import os
 import requests
+import datetime
+import dateutil.parser as dp
+
 from PIL import Image
 from tqdm import tqdm
 
@@ -102,10 +105,6 @@ def GetImageEarth(img_path = "", img_name = 'himawari.png', scale = 550, tile_nu
         the last image taken from planet Earth of the Japanese satellite Himawari 8
     """
     
-    if not tile_number in {2, 4, 8, 16, 20}:
-        raise Exception("The tile_number value '{}' is outside valid values".format(tile_number))
-        return
-    
     HORIZONTAL = tuple(range(0, tile_number))
     VERTICAL = tuple(range(0, tile_number))
     path = '%s%s' % (img_path, img_name)    
@@ -122,3 +121,18 @@ def GetImageEarth(img_path = "", img_name = 'himawari.png', scale = 550, tile_nu
         image.save(path)
 
     return image
+
+def RangeDate(start, finish):
+    _start = dp.parse(start)
+    _finish = dp.parse(finish)    
+    
+    if _finish < _start:
+        raise Exception("Date '{}' should be less than Date '{}'".format(start, finish))
+    
+    u = _start.minute % 10
+    minute = _start.minute - u if u < 5 else _start.minute - u + 10  
+    base = datetime.datetime(_start.year, _start.month, _start.day, _start.hour, minute, 0, 0)
+    total_minutes = (_finish - _start).total_seconds()/60
+    
+    for i in range(int(total_minutes/10)):
+        yield (base + datetime.timedelta(minutes = i * 10)).strftime("%m-%d-%Y %H:%M:%S") 
