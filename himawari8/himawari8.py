@@ -102,6 +102,10 @@ def GetImageEarth(img_path = "", img_name = 'himawari.png', scale = 550, tile_nu
         the last image taken from planet Earth of the Japanese satellite Himawari 8
     """
     
+    if not tile_number in {2, 4, 8, 16, 20}:
+        raise Exception("The tile_number value '{}' is outside valid values".format(tile_number))
+        return
+    
     HORIZONTAL = tuple(range(0, tile_number))
     VERTICAL = tuple(range(0, tile_number))
     path = '%s%s' % (img_path, img_name)    
