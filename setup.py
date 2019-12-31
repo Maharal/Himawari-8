@@ -1,4 +1,9 @@
 from distutils.core import setup
+
+# commands
+# python setup.py sdist
+# twine upload dist/*
+
 setup(
   name = 'himawari8',         
   version = '0.8',      
