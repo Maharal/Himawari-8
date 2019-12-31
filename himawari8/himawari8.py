@@ -90,7 +90,7 @@ def GetUrlTile(tile_number, date, h, v):
     
     return '%s/%dd/550/%s_%d_%d.png' % (BASE_URL, tile_number, FormatDate(date), h, v)
 
-def GetImageEarth(img_path = "", img_name = 'himawari.png', scale = 550, tile_number = 4, save_img = False, n_trials = 10, show_progress = True):
+def GetImageEarth(img_path = "", img_name = 'himawari.png', date = None, scale = 550, tile_number = 4, save_img = False, n_trials = 10, show_progress = True):
     
     """
     Parameters
@@ -108,12 +108,11 @@ def GetImageEarth(img_path = "", img_name = 'himawari.png', scale = 550, tile_nu
     HORIZONTAL = tuple(range(0, tile_number))
     VERTICAL = tuple(range(0, tile_number))
     path = '%s%s' % (img_path, img_name)    
-    date = GetLastImageDate(n_trials)
     image = Image.new('RGB', tuple(scale * len(n) for n in (HORIZONTAL, VERTICAL)))
 
     for x, h in enumerate(tqdm(iterable = HORIZONTAL, disable = not show_progress)):
         for y, v in enumerate(VERTICAL):
-            url = GetUrlTile(tile_number, date, h, v)
+            url = GetUrlTile(tile_number, GetLastImageDate(n_trials) if date is None else date, h, v)
             tile = GetTile(url, n_trials)
             image.paste(tile.resize((scale, scale), Image.BILINEAR), tuple(n * scale for n in (x, y)))
     
@@ -121,6 +120,35 @@ def GetImageEarth(img_path = "", img_name = 'himawari.png', scale = 550, tile_nu
         image.save(path)
 
     return image
+
+def GetImagesEarth(start, finish, img_path = "", img_name = 'h8_{date}.png', scale = 550, tile_number = 4, save_img = False, n_trials = 10, show_progress = True):
+    
+    """
+    Parameters
+        - start: start date
+        - finish: end date
+        - img_path: Path where the image will be saved
+        - img_name: Name of the image if it is saved, use the tag {date} for specify the place of date
+        - scale: Scale of tiles
+        - tile_number: Number of tiles: 2, 4, 8, 16, 20
+        - save_img: Save image option
+        - n_trials: Number of retries on requests
+        
+    Return:
+        the last image taken from planet Earth of the Japanese satellite Himawari 8
+    """
+    
+    dates = [date for date in RangeDate(start, finish)]
+    return [GetImageEarth(
+        img_path=img_path, 
+        img_name=img_name.replace("{date}", FormatDate(date).replace("/", '')), 
+        scale=scale,
+        tile_number=tile_number,
+        save_img=save_img,
+        n_trials=n_trials,
+        show_progress=False,
+        date=date) 
+            for date in tqdm(iterable = dates, disable = not show_progress)]
 
 def RangeDate(start, finish):
     
@@ -145,4 +173,4 @@ def RangeDate(start, finish):
     total_minutes = (_finish - _start).total_seconds()/60
     
     for i in range(int(total_minutes/10)):
-        yield (base + datetime.timedelta(minutes = i * 10)).strftime("%m-%d-%Y %H:%M:%S") 
+        yield (base + datetime.timedelta(minutes = i * 10)).strftime("%Y-%m-%d %H:%M:%S") 
