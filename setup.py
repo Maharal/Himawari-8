@@ -20,7 +20,8 @@ setup(
           'Pillow',
           'tqdm',
           'setuptools',
-          'wheel'
+          'wheel',
+          'python-dateutil'
       ],
   classifiers=[
     'Development Status :: 3 - Alpha',      
